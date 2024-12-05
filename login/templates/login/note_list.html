@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .note {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #fff;
+        }
+        .note h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .note p {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Note List</h1>
+        {% if notes %}
+            {% for note in notes %}
+                <div class="note">
+                    <h2>{{ note.title }}</h2>
+                    <p>Lecturer: {{ note.lecturer.username }}</p>
+                    <p>Uploaded at: {{ note.uploaded_at }}</p>
+                    <p><a href="{{note.file.url}}" download="{{ note.file.name }}" >Download Note</a></p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No notes available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

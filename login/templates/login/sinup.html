@@ -1,0 +1,68 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'sinup.css' %}">
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <div class="new">
+        <ul>
+            <li><a href="{% url 'home' %}"> HOME</a></li>
+            <li><a href="{% url 'login' %}">LOGIN</a></li>
+        </ul>
+    <div class="top">
+
+
+    <div class="main">
+        <div class="upper">
+            <div class="left">
+                <h2>Lecturer-Student</h2>
+
+            </div>
+            <div class="right">
+                <button class="btn1">notes</button>
+            </div>
+
+        </div>
+        <div class="body">
+            <h3> Sign Up</h3>
+            <p>Create your Account</p>
+            <p>Already have an account?<a href="{% url 'login' %}">Login</a></p>
+
+            {% for message in messages %}
+            <h5> {{ message }}</h5>
+            {% endfor %}
+              <form action="{% url 'sinup' %}" method="POST">
+                  {% csrf_token %}
+                  <input type="text" name="firstname" id="firstname" required placeholder="firstname" >
+                <br><br>
+                  <input type="text" name="lastname" id="lastname" required placeholder="lastname" >
+                <br><br>
+                <input type="text" name="username" id="username" required placeholder="username" >
+                <br><br>
+                <input type="email" name="email" id="email" required placeholder="Email">
+                <br> <br>
+                <input type="number" name="phone" id="phone" required placeholder="phone number">
+                <br><br>
+                <input type="password" name="password" id="password" required placeholder="Password">
+                <br><br>
+                <input type="password" name="password2" id="password2" required placeholder="Comfirm Password">
+                <br>
+                <p>Choose your Category</p>
+                <label for="student">Student</label>
+                <input type="radio" name="category" value="Student" class="radio"><br>
+                <label for="lecturer">Lecturer</label>
+                <input type="radio" name="category" id="lecture" value="Lecturer" class="radio">
+                <br><br>
+{#                 <input type="number" name="student Id" required placeholder="Student Id">#}
+
+{#                 <input type="number" name="Lecturer Id" id="Lecturer Id"  placeholder="Lecturer Id">#}
+                 <input type="submit" name="submit" value="Sign Up" class="sin">
+              </form>
+        </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

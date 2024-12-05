@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="{% static 'home.css' %}">
+    <title>Homepage</title>
+</head>
+<body>
+    <div class="main">
+        <h2>Lecturer-Student Notes Repository</h2>
+     <div class="body">
+        <div class="welcome">
+            <h1>Get your notes anytime,</h1>
+            <h1>anywhere with </h1>
+            <h1>Lecturer-Student Notes Repository</h1>
+            <p>Welcome  </p>
+            <p>This website act as a platform where students can access
+               notes easly </p>
+               <p>Where by it enhance leacturers ability to share notes or resources on time </p>
+                <p>and contribute to the learning experince </p>
+
+            <p> To create an account please sign up by cliking the Sign up Button</p>
+            <p> To access the notes please login</p>
+            <a href="{% url 'sinup' %}"><button> Sign Up</button></a> <a href="{% url 'login' %}"> <button>Login</button></a>
+        </div>
+        <div class="picture">
+        <img src="{% static 'home.jpg' %}" alt="Picture">
+        </div>
+
+     </div>
+    </div>
+
+</body>
+</html>
