@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+</head>
+
+<body>
+    
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h4 class="text-white">Dashboard</h4>
+        <br>
+        <h5 style="color: antiquewhite;">Welcome {{ user.username }}</h5>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Settings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'feedback' %}">Feedback</a>
+            </li>
+
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+                        
+            {% else %}
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            {% endif %}
+                        
+        </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="actions">
+            <div class="download">
+                {% if user.is_authenticated %}
+                    {% if user.profile.category == "Student" %}
+                        <div>
+                            <h2>Empower Your Studies</h2>
+                            <p>Welcome to the Lecturer-Student Notes Repository. Access your notes anytime, anywhere.</p>
+                            <p>Stay organized and efficient with our repository.</p>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">View Uploaded Notes</h5>
+                                    <a href="{% url 'note_list' %}" class="btn btn-primary">View Notes</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% elif user.profile.category == "Lecturer" %}
+                        <div>
+                            <h2>Stay Connected with Your Students</h2>
+                            <p>Welcome to the Lecturer-Student Notes Repository. Upload notes anytime, anywhere.</p>
+                            <p>Enhance collaboration and learning.</p>
+                            <a href="{% url 'note_list' %}" class="btn btn-primary">View Notes</a>
+                        </div>
+                        <div class="upload">
+                            <h3>Upload Notes</h3>
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                            <form method="POST" enctype="multipart/form-data" action="{% url 'upload' %}">
+                                {% csrf_token %}
+                                <input type="text" id="title" name="title" placeholder="Title" required>
+                                <input type="file" id="noteFile" name="noteFile" required>
+                                <button type="submit" class="btn btn-success">Upload Notes</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -18,7 +18,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-from login.views import sinup,login,home,dashboard,logout,upload,note_list,feedback,password_reset
+from login.views import sinup,login,home,dashboard,logout,upload,note_list,feedback,forgot_password,password_reset_sent,reset_password, verify_email
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('sinup/',sinup,name='sinup'),
@@ -29,7 +30,11 @@ urlpatterns = [
     path('upload/', upload, name='upload'),  # URL for note upload (restricted to lecturers)
     path('note_list/',note_list,name='note_list'),
     path('feedback/',feedback,name='feedback'),
-    path('password_reset',password_reset, name='password_reset'),
+
+    path('forgot_password', forgot_password ,name='forgot_password'),
+    path('password_reset_sent/<str:reset_id>/', password_reset_sent, name='password_reset_sent'),
+    path('reset_password/<str:reset_id>/', reset_password,name="reset_password"),
+    path('verify-email/<str:uidb64>/<str:token>/', verify_email, name='verify_email'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

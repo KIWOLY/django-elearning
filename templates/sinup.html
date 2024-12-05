@@ -1,0 +1,106 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'sinup.css' %}">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Notes-Platform</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Signup Form -->
+
+{% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <h2 class="text-center mb-4">Create an Account</h2>
+            <form method="POST" action="{% url 'sinup' %}">
+                {% csrf_token %}
+              
+                <div class="mb-3">
+                    <label for="firstname" class="form-label">Firstname</label>
+                    <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter your username">
+                </div>
+                 
+                <div class="mb-3">
+                    <label for="lastname" class="form-label">Lastname</label>
+                    <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter your lastname">
+                </div>
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
+                </div>
+
+                  <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="number" class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
+                </div>
+                <div class="mb-3">
+                <label for="student">Student</label>
+                <input type="radio" name="category" value="Student" class="radio" required><br>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+                </div>
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="password2" name="password2"   placeholder="Re-enter your password">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                <p class="text-center mt-3">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4">
+    <div class="container text-center">
+        <p>&copy; cognitech. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
