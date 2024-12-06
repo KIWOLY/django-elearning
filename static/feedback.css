@@ -1,29 +1,29 @@
+/* General Page Styling */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    background-color: #f8f9fa;
 }
 
 .container {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 20px;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-    text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 p {
-    text-align: center;
     margin-bottom: 20px;
 }
 
+/* Form Styling */
 form {
     display: flex;
     flex-direction: column;
@@ -31,7 +31,7 @@ form {
 
 label {
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 input[type="text"],
@@ -39,27 +39,29 @@ input[type="email"],
 textarea {
     padding: 10px;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
+    border: 1px solid #ced4da;
     border-radius: 4px;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s ease;
 }
 
 input[type="text"]:focus,
 input[type="email"]:focus,
 textarea:focus {
     border-color: #007bff;
+    outline: none;
 }
 
-input[type="submit"] {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
+button {
+    padding: 10px 15px;
+    font-size: 1rem;
     border: none;
     border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
-input[type="submit"]:hover {
+button:hover {
     background-color: #0056b3;
 }
