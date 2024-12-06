@@ -48,7 +48,6 @@
             <h2 class="text-center mb-4">Create an Account</h2>
             <form method="POST" action="{% url 'sinup' %}">
                 {% csrf_token %}
-              
                 <div class="mb-3">
                     <label for="firstname" class="form-label">Firstname</label>
                     <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter your username">
