@@ -29,17 +29,20 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+
 # CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if origin.strip()]
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://notes-platform.deploy.tz",  # Add this
-    "http://127.0.0.1",                 # Add this if you're testing locally
-    "http://localhost",                  # Add localhost if needed
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://notes-platform.deploy.tz",  # Add this
+#     "http://127.0.0.1",                 # Add this if you're testing locally
+#     "http://localhost",                  # Add localhost if needed
+# ]
 
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
 
 
@@ -157,7 +160,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
-
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
