@@ -239,7 +239,7 @@ def reset_password(request,reset_id):
                 password_have_error=True
                 messages.info(request, 'Password must be at least 6 characters')
 
-            expiration_time=password_reset_id.created_when + timezone.timedelta(minutes=1)
+            expiration_time=password_reset_id.created_when + timezone.timedelta(minutes=10)
 
             if timezone.now() > expiration_time:
                 password_have_error=True
