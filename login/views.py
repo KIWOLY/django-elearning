@@ -1,90 +1,99 @@
-from django.shortcuts import render, redirect,HttpResponse
-from django.contrib.auth.models import User, auth
+from django.shortcuts import render, redirect, HttpResponse
+from django.contrib.auth.models import User,auth
 from django.contrib import messages
-from .models import Profile ,Note ,Feedback,PasswordReset,Student
+from .models import Profile, Note, Feedback, PasswordReset, Subject, Number
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import views as auth_views
-from django.urls import reverse
-from django.utils import timezone
-from django.core.mail import EmailMessage
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator
-
+from django.http import HttpResponseForbidden, FileResponse, Http404
+from django.shortcuts import get_object_or_404
 
 
 
 
 def sinup(request):
     if request.method == 'POST':
-        firstname = request.POST['firstname']
-        lastname = request.POST['lastname']
-        username = request.POST['username']
-        email = request.POST['email']
-        phone = request.POST['phone']
-        password = request.POST['password']
-        password2 = request.POST['password2']
-        category = request.POST['category']
+        # Getting input data from form
+        firstname = request.POST.get('firstname')
+        lastname = request.POST.get('lastname')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        category = request.POST.get('category')
+        registration_number = request.POST.get('registration_number')
 
-        if password == password2:
-            if User.objects.filter(username=username).exists():
-                messages.info(request, 'Username already taken')
-                return redirect('sinup')
-            elif User.objects.filter(email=email).exists():
-                messages.info(request, 'Email already taken')
-                return redirect('sinup')
-            else:
-                try:
-                    # Create a new user
-                    user = User.objects.create_user(username=username, email=email, password=password)
-                    # Set first name and last name
-                    user.first_name = firstname
-                    user.last_name = lastname
-                    profile = Profile.objects.create(user=user, phone=phone, category=category)
-                    profile.phone = phone
-                    profile.category = category
-                    user.is_active = False
-                    # Save the user
-                    user.save()
-                    profile.save()
-
-                    token = default_token_generator.make_token(user)
-                    uid = urlsafe_base64_encode(force_bytes(user.pk))
-                # verification_link = request.build_absolute_uri(reverse('verify_email', args=[uid, token]))
-                    verification_link = request.build_absolute_uri(f"/verify-email/{uid}/{token}/")
-                    send_mail(
-                    'Verify Your Email Address',
-                     f'Click the link to verify your email: {verification_link}',
-                    'admin@example.com',
-                    [email],)
-                    fail_silently=False,
-
-                    messages.info(request,"Check your email to verify your account.")
-                    return redirect('sinup')
-                    # Create a profile associated with the user
-                    
-
-
-                    # Optionally, set additional fields directly on the Profile object
-                    
-                    
-
-                    messages.success(request, 'Account created successfully.')
-                    return redirect('login')
-                except ValidationError as e:
-                    messages.error(request, e.message)
-                    return redirect('sinup')
-        else:
-            messages.error(request, 'Passwords do not match')
+        # Check if all fields are filled
+        if not all([firstname, lastname, username, email, phone, password, password2, category, registration_number]):
+            messages.info(request, 'All fields are required.')
             return redirect('sinup')
 
-    else:
-        return render(request, 'sinup.html')
+        # Check if the registration number is valid and exists in the Number model
+        try:
+            number_instance = Number.objects.get(number=registration_number)
+        except Number.DoesNotExist:
+            messages.info(request, 'Your registration number shows that you are not a member of ISM 2 .')
+            return redirect('sinup')
+
+        # Ensure the registration number is not used by any other profile
+        if Profile.objects.filter(registration_number=number_instance).exists():
+            messages.info(request, 'This registration number has already been used.')
+            return redirect('sinup')
+
+        # Ensure passwords match
+        if password==password2:
+            if len(password)<6:
+                messages.info(request, 'Password must be at least 6 characters')
+                return redirect('sinup')    
+
+            if User.objects.filter(username=username).exists():
+                messages.info(request, 'Username already exists')
+                return redirect('sinup')
+            elif User.objects.filter(email=email).exists():
+                messages.info(request, 'Email already exists')
+                return redirect('sinup')
+            else:
+                user=User.objects.create_user(username=username, password=password, email=email)
+                user.is_active = False
+                user.first_name = firstname
+                user.last_name = lastname
+                user.is_active = False
+                user.save()
+
+                profile = Profile.objects.get(user=user)
+                profile.phone = phone
+                profile.category = category
+                profile.registration_number = registration_number
+                profile.save()
+                
+                # number_instance.delete()
+
+            # Send the email verification link
+                token = default_token_generator.make_token(user)
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                verification_link = request.build_absolute_uri(f"/verify-email/{uid}/{token}/")
+                send_mail(
+                    'Verify Your Email Address',
+                    f'Click the link to verify your email: {verification_link}',
+                    'admin@example.com',
+                    [email],
+                    fail_silently=False,
+                )
+
+                messages.success(request, 'Account created successfully. Check your email to verify your account.')
+                return redirect('login')
+        
+        else:
+            messages.info(request, 'Passwords do not match')
+            return redirect('sinup')       
+    return render( request, 'sinup.html')    
+            
+        
 
 
 def verify_email(request, uidb64, token):
@@ -104,7 +113,11 @@ def verify_email(request, uidb64, token):
     return redirect('signup')
 
 
-
+@login_required
+def profile_view(request):
+    # Fetch the profile of the currently logged-in user
+    profile = request.user.profile  
+    return render(request, 'profile.html', {'profile': profile})
 
 
 def login(request):
@@ -135,7 +148,8 @@ def home(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    subjects = Subject.objects.all()  # Fetch all subjects
+    return render(request, 'dashboard.html',{'subjects': subjects})
 
 
 
@@ -156,26 +170,72 @@ def feedback(request):
 
 @login_required
 def upload(request):
+    # Check if the user is a Lecturer
     if request.user.profile.category != 'Lecturer':
         messages.error(request, 'You do not have permission to upload notes.')
         return redirect('dashboard')
 
+    # Handle the POST request
     if request.method == 'POST':
-        uploaded_file = request.FILES['noteFile']
-        title = request.POST['title']  # Assuming you have a 'title' field in your HTML form
+        uploaded_file = request.FILES.get('noteFile')
+        title = request.POST.get('title')
+        subject_name = request.POST.get('subject')  # Extract the subject from the form
+
+        # Validate that all fields are provided
+        if not uploaded_file or not title or not subject_name:
+            messages.error(request, 'All fields are required.')
+            return redirect('upload')
+        
+        # Retrieve the Subject instance
+        subject = get_object_or_404(Subject, name=subject_name)
 
         # Create a new Note instance and save it to the database
-        note = Note.objects.create(lecturer=request.user, title=title, file=uploaded_file)
+        note = Note.objects.create(
+            lecturer=request.user,
+            title=title,
+            subject=subject,  # Save the subject
+            file=uploaded_file
+        )
         messages.success(request, 'Note uploaded successfully.')
         return redirect('dashboard')
 
-    # return render(request, 'upload.html')
+    # If not a POST request, redirect or render a page
+    messages.error(request, 'Invalid request method.')
+    return redirect('upload')
 
 
 
-def note_list(request):
-    notes = Note.objects.all()
-    return render(request, 'note_list.html', {'notes': notes})
+
+@login_required
+def delete_note(request, note_id):
+    note = get_object_or_404(Note, id=note_id)
+    
+    # Optional: Restrict deletion to the note owner or admin
+    if request.user != note.lecturer and not request.user.is_superuser:
+        return HttpResponseForbidden("You do not have permission to delete this note.")
+    
+    note.delete()
+    return redirect('dashboard')  # Replace 'dashboard' with your desired redirect URL
+
+
+
+def note_list(request, subject_id):
+    subject = get_object_or_404(Subject, id=subject_id)
+    notes = subject.notes.all()
+    return render(request, 'notes_list.html', {'subject': subject, 'notes': notes})
+
+def subject_list(request):
+    subjects = Subject.objects.all()
+    return render(request, 'subject_list.html', {'subjects': subjects})
+
+
+
+def download_note(request, note_id):
+    note = get_object_or_404(Note, id=note_id)
+    try:
+        return FileResponse(note.file.open(), as_attachment=True)
+    except FileNotFoundError:
+        raise Http404("File not found")
 
 
 

@@ -1,6 +1,6 @@
-
-
 {% load static %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,14 +8,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'loginn.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* Ensure the footer is at the bottom of the page */
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            flex: 1;
+        }
+
+        footer {
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="#">Notes-Platform</a>
+        <a class="navbar-brand fw-bold" href="#">Notes-Platform</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -32,6 +54,7 @@
     </div>
 </nav>
 
+<!-- Flash Messages -->
 {% if messages %}
     <div class="container mt-3">
         {% for message in messages %}
@@ -42,42 +65,46 @@
     </div>
 {% endif %}
 
-
-
+<!-- Login Form -->
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-4">
-            <h2 class="text-center mb-4">Login </h2>
-            <form method="POST"  action="{% url 'login' %}">
-                {% csrf_token %}
-                <div class="mb-4">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" name="username"   placeholder="Enter your username">
+        <div class="col-lg-5 col-md-6 col-sm-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="text-center text-primary mb-4">Login</h3>
+                    <form method="POST" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        <p class="text-center mt-3">
+                            Forgot password? <a href="{% url 'forgot_password' %}" class="text-decoration-none">Click here</a>
+                        </p>
+                        <p class="text-center mb-3">
+                            Don't have an account? <a href="{% url 'sinup' %}" class="text-decoration-none">Sign up here</a>
+                        </p>
+                        
+                        
+                    </form>
                 </div>
-                <div class="mb-5">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-                <p class="text-center mt-5">Forgot password?
-                    <a href="{% url 'forgot_password'%}"> Click here</a>
-                </p>
-                <p class="text-center">
-                    Don't have an account? <a href="{% url 'sinup' %}">Sign up here</a>
-                </p>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Footer -->
-<footer class="bg-dark text-white py-4  ">
+<footer class="bg-dark text-white py-4">
     <div class="container text-center">
-        <p>&copy; cognitech. All Rights Reserved.</p>
+        <p>&copy; Cognitech. All Rights Reserved.</p>
     </div>
 </footer>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-
 </body>
 </html>
