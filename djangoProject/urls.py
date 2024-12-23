@@ -52,3 +52,9 @@ urlpatterns = [
 
 
 ]
+if settings.DEBUG is False:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+from django.conf.urls import handler404
+handler404='login.views.page_not_found'

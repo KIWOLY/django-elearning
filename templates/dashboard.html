@@ -15,8 +15,10 @@
             position: fixed;
             top: 0;
             left: 0;
+            width: 250px;
             padding: 20px;
             transition: all 0.3s ease-in-out;
+            z-index: 100; /* Ensure sidebar is behind the content */
         }
         .sidebar a {
             color: white;
@@ -33,9 +35,12 @@
             background-color: #007bff;
         }
         .main-content {
-            margin-left: 250px;
+            margin-left: 250px; /* Initial margin for large screens */
             padding: 20px;
+            z-index: 10; /* Ensure content is in front of sidebar */
+            transition: margin-left 0.3s ease-in-out; /* Smooth transition for main content */
         }
+
         /* Responsive design for smaller screens */
         @media (max-width: 768px) {
             .sidebar {
@@ -48,6 +53,9 @@
             }
             .main-content {
                 margin-left: 0;
+            }
+            .main-content.show-sidebar {
+                margin-left: 250px; /* Adjust main content margin when sidebar is shown */
             }
         }
     </style>
@@ -100,7 +108,7 @@
                 </div>
                 {% elif user.profile.category == "Lecturer" %}
                 <div>
-                    <h2 class="text-center">Stay Connected with Your fellow Students</h2>
+                    <h2 class="text-center">Stay Connected with Your Fellow Students</h2>
                     <h5>Welcome, {{ user.username }}!</h5>
                     <p>Upload and share notes effortlessly.</p>
                     <div class="card mb-4">
@@ -147,7 +155,13 @@
         // Toggle sidebar on smaller screens
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('.main-content');
+
+            // Toggle sidebar visibility
             sidebar.classList.toggle('show');
+
+            // Adjust the margin of the main content when sidebar is shown
+            mainContent.classList.toggle('show-sidebar');
         });
     </script>
 </body>
