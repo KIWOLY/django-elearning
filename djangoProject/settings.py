@@ -33,19 +33,25 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')
 DEBUG=False
 
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
+ALLOWED_HOSTS = [
+    'notes-platform.deploy.tz',
+    'notes-platform.onrender.com',
+    '127.0.0.1',
+    'localhost'
+]
 
 
 # CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if origin.strip()]
 
-# CSRF_TRUSTED_ORIGINS = [
-#     "https://notes-platform.deploy.tz",  # Add this
-#     "http://127.0.0.1",                 # Add this if you're testing locally
-#     "http://localhost",                  # Add localhost if needed
-# ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://notes-platform.deploy.tz",  # Add this
+    "http://127.0.0.1",                 # Add this if you're testing locally
+    "http://localhost",                  # Add localhost if needed
+]
 
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
+# CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
 
 
