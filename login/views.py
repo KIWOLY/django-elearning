@@ -11,6 +11,9 @@ from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator
 from django.http import HttpResponseForbidden, FileResponse, Http404
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from django.conf import settings
+
 
 
 
