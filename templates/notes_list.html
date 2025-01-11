@@ -28,7 +28,7 @@
                     <li class="list-group-item">
                         <h4>{{ note.title }}</h4>
                         <p><strong>Uploaded by:</strong> {{ note.lecturer.username }}</p>
-                        <p><strong>Uploaded on:</strong> {{ note.uploaded_at|date:"D, M j, Y H:i" }}</p>
+                        <!-- <p><strong>Uploaded on:</strong> {{ note.uploaded_at|date:"D, M j, Y H:i" }}</p> -->
 
                         <a href="{% url 'download_note' note.id %}" class="btn btn-primary">Download</a>
             
