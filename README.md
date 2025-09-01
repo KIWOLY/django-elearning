@@ -41,7 +41,7 @@ Backend: Django (Python)
 
 Frontend: HTML, CSS, JavaScript
 
-Database: SQLite / MySQL (configurable)
+Database: SQLite3
 
 Other: Django ORM, Bootstrap (for UI)
 
